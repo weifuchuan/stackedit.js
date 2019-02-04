@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 const styleContent = `
 .stackedit-no-overflow {
   overflow: hidden;
@@ -92,7 +94,10 @@ const urlParser = document.createElement('a');
 
 class Stackedit {
   $options = {
-    url: 'https://stackedit.io/app',
+    url: 'https://cdn.jsdelivr.net/gh/weifuchuan/stackedit@5.13.3.fc/dist/index.html',
+    uploadAction: '',
+    DEV: false,
+    staticBaseUrl: ''
   };
 
   constructor(opts = {}) {
@@ -107,7 +112,7 @@ class Stackedit {
   $trigger(type, payload) {
     const listeners = this.$listeners[type] || [];
     // Use setTimeout as a way to ignore errors
-    listeners.forEach(listener => setTimeout(() => listener(payload), 1));
+    listeners.forEach((listener) => setTimeout(() => listener(payload), 1));
   }
 
   on(type, listener) {
@@ -141,13 +146,14 @@ class Stackedit {
       origin,
       fileName: file.name,
       contentText: content.text,
-      contentProperties: !content.yamlProperties && content.properties
-        ? JSON.stringify(content.properties) // Use JSON serialized properties as YAML properties
-        : content.yamlProperties,
-      silent,
+      contentProperties:
+        !content.yamlProperties && content.properties
+          ? JSON.stringify(content.properties) // Use JSON serialized properties as YAML properties
+          : content.yamlProperties,
+      silent
     };
     const serializedParams = Object.keys(params)
-      .map(key => `${key}=${encodeURIComponent(params[key] || '')}`)
+      .map((key) => `${key}=${encodeURIComponent(params[key] || '')}`)
       .join('&');
     urlParser.hash = `#${serializedParams}`;
 
@@ -162,7 +168,12 @@ class Stackedit {
 
     // Load StackEdit in the iframe
     const iframeEl = this.$containerEl.querySelector('iframe');
-    iframeEl.src = urlParser.href;
+    iframeEl.src =
+      urlParser.href +
+      `?${qs.stringify({
+        uploadAction: this.$options.uploadAction,
+        DEV: this.$options.DEV
+      })}`;
 
     // Add close button handler
     const closeButton = this.$containerEl.querySelector('a');
@@ -170,7 +181,10 @@ class Stackedit {
 
     // Add message handler
     this.$messageHandler = (event) => {
-      if (event.origin === this.$origin && event.source === iframeEl.contentWindow) {
+      if (
+        event.origin === this.$origin &&
+        event.source === iframeEl.contentWindow
+      ) {
         switch (event.data.type) {
           case 'ready':
             // StackEdit has its own one close button
@@ -208,7 +222,10 @@ class Stackedit {
       this.$containerEl = null;
 
       // Restore body scrollbars
-      document.body.className = document.body.className.replace(/\sstackedit-no-overflow\b/, '');
+      document.body.className = document.body.className.replace(
+        /\sstackedit-no-overflow\b/,
+        ''
+      );
 
       // Trigger close event
       this.$trigger('close');
