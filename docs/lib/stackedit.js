@@ -378,7 +378,7 @@ var Stackedit = function () {
     _classCallCheck(this, Stackedit);
 
     this.$options = {
-      url: 'https://cdn.jsdelivr.net/gh/weifuchuan/stackedit@5.13.3.fc/dist/index.html',
+      url: 'https://cdn.jsdelivr.net/gh/weifuchuan/stackedit@5.13.3.fc.2/dist/index.html',
       uploadAction: '',
       DEV: false,
       staticBaseUrl: ''
@@ -465,7 +465,8 @@ var Stackedit = function () {
       var iframeEl = this.$containerEl.querySelector('iframe');
       iframeEl.src = urlParser.href + ('?' + _qs2.default.stringify({
         uploadAction: this.$options.uploadAction,
-        DEV: this.$options.DEV
+        DEV: this.$options.DEV,
+        staticBaseUrl: this.$options.staticBaseUrl
       }));
 
       // Add close button handler

@@ -94,7 +94,8 @@ const urlParser = document.createElement('a');
 
 class Stackedit {
   $options = {
-    url: 'https://cdn.jsdelivr.net/gh/weifuchuan/stackedit@5.13.3.fc/dist/index.html',
+    url:
+      'https://cdn.jsdelivr.net/gh/weifuchuan/stackedit@5.13.3.fc.2/dist/index.html',
     uploadAction: '',
     DEV: false,
     staticBaseUrl: ''
@@ -172,7 +173,8 @@ class Stackedit {
       urlParser.href +
       `?${qs.stringify({
         uploadAction: this.$options.uploadAction,
-        DEV: this.$options.DEV
+        DEV: this.$options.DEV,
+        staticBaseUrl: this.$options.staticBaseUrl
       })}`;
 
     // Add close button handler
