@@ -378,7 +378,7 @@ var Stackedit = function () {
     _classCallCheck(this, Stackedit);
 
     this.$options = {
-      url: 'https://stackedit.io/app',
+      url: 'https://cdn.jsdelivr.net/gh/weifuchuan/stackedit@5.13.3.fc/dist/index.html',
       uploadAction: '',
       DEV: false,
       staticBaseUrl: ''
